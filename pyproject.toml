@@ -1,0 +1,35 @@
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+fixable = ["ALL"]
+[project]
+name = "goit-pythonweb-hw-01"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Myshko Alona",email = "myshko.alona@gmail.com"}
+]
+requires-python = ">=3.12"
+dependencies = [
+    "colorama (>=0.4.6,<0.5.0)"
+]
+
+
+[tool.poetry]
+packages = [{include = "src"}]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "black (>=26.3.1,<27.0.0)"
+]
