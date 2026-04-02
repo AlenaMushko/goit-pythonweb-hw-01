@@ -1,14 +1,14 @@
-from colorama import Fore, Style
+import logging
 
 from src.library.book import Book
 from src.library.interfaces import LibraryInterface
-from src.logger import Logger
+
+logger = logging.getLogger(__name__)
 
 
 class Library(LibraryInterface):
     def __init__(self) -> None:
         self._books: list[Book] = []
-        self._log = Logger()
 
     def _validate_book_fields(self, title: str, author: str, year: str) -> None:
         if not title.strip():
@@ -27,30 +27,34 @@ class Library(LibraryInterface):
     def add_book(self, title: str, author: str, year: str) -> None:
         self._validate_book_fields(title, author, year)
         self._books.append(Book(title.strip(), author.strip(), year.strip()))
-        self._log.info(
-            f"Додано книгу: {title.strip()} ({author.strip()}, {year.strip()})"
+        logger.info(
+            "Додано книгу: %s (%s, %s)",
+            title.strip(),
+            author.strip(),
+            year.strip(),
         )
 
     def remove_book(self, title: str) -> bool:
         if not title.strip():
-            self._log.warning("Спроба видалити книгу з порожньою назвою.")
+            logger.warning("Спроба видалити книгу з порожньою назвою.")
             return False
         for book in self._books:
             if book.title == title.strip():
                 self._books.remove(book)
-                self._log.info(f"Видалено книгу: {book.title}")
+                logger.info("Видалено книгу: %s", book.title)
                 return True
-        self._log.warning(f"Книгу не знайдено для видалення: {title.strip()}")
+        logger.warning("Книгу не знайдено для видалення: %s", title.strip())
         return False
 
     def show_books(self) -> None:
         if not self._books:
-            self._log.info("Список книг порожній.")
-            print(f"{Fore.YELLOW}У бібліотеці ще немає книг.{Style.RESET_ALL}")
+            logger.info("Список книг порожній. У бібліотеці ще немає книг.")
             return
-        self._log.info(f"Показано список книг ({len(self._books)} шт.).")
+        logger.info("Показано список книг (%d шт.).", len(self._books))
         for book in self._books:
-            print(
-                f"{Fore.CYAN}Title: {book.title}, "
-                f"Author: {book.author}, Year: {book.year}{Style.RESET_ALL}"
+            logger.info(
+                "Title: %s, Author: %s, Year: %s",
+                book.title,
+                book.author,
+                book.year,
             )

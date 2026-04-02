@@ -1,5 +1,8 @@
+import logging
+
 from src.vehicles.base import Vehicle
-from colorama import Fore, Style
+
+logger = logging.getLogger(__name__)
 
 
 class Motorcycle(Vehicle):
@@ -9,8 +12,9 @@ class Motorcycle(Vehicle):
         self.region_spec = region_spec
 
     def start_engine(self) -> None:
-        msg = (
-            f"{Fore.BLUE}{self.make} {self.model} ({self.region_spec}): "
-            f"Мотор заведено{Style.RESET_ALL}"
+        logger.info(
+            "%s %s (%s): Мотор заведено",
+            self.make,
+            self.model,
+            self.region_spec,
         )
-        print(msg)

@@ -1,14 +1,18 @@
+import logging
+
 from colorama import Fore, Style, init
 
 from src.library import Library, LibraryManager
-from src.logger import Logger
+from src.logger import configure_logging
 
 init(autoreset=True)
 
+logger = logging.getLogger(__name__)
+
 
 def main() -> None:
-    log = Logger()
-    log.info("Запуск програми керування бібліотекою.")
+    configure_logging()
+    logger.info("Запуск програми керування бібліотекою.")
 
     library = Library()
     manager = LibraryManager(library)
@@ -35,9 +39,8 @@ def main() -> None:
                             ).strip()
                             manager.add_book(title, author, year)
                         except EOFError:
-                            log.warning("Несподіваний кінець вводу під час add.")
-                            print(
-                                f"{Fore.RED}Ввід перервано.{Style.RESET_ALL}"
+                            logger.warning(
+                                "Несподіваний кінець вводу під час додавання книги."
                             )
                     case "remove":
                         try:
@@ -47,43 +50,31 @@ def main() -> None:
                             ).strip()
                             manager.remove_book(title)
                         except EOFError:
-                            log.warning("Несподіваний кінець вводу під час remove.")
-                            print(
-                                f"{Fore.RED}Ввід перервано.{Style.RESET_ALL}"
+                            logger.warning(
+                                "Несподіваний кінець вводу під час видалення."
                             )
                     case "show":
                         manager.show_books()
                     case "exit":
-                        log.info("Завершення роботи за командою exit.")
-                        print(f"{Fore.CYAN}До побачення!{Style.RESET_ALL}")
+                        logger.info("Завершення роботи за командою exit.")
                         break
                     case "":
-                        log.warning("Порожня команда.")
-                        print(
-                            f"{Fore.YELLOW}Введіть команду: add, remove, show або exit."
-                            f"{Style.RESET_ALL}"
+                        logger.warning("Порожня команда.")
+                        logger.info(
+                            "Введіть команду: add, remove, show або exit."
                         )
                     case _:
-                        log.warning(f"Невідома команда: {command!r}.")
-                        print(
-                            f"{Fore.RED}Invalid command. Please try again."
-                            f"{Style.RESET_ALL}"
-                        )
+                        logger.info("Invalid command. Please try again.")
             except EOFError:
-                log.info("Завершення: кінець вводу (EOF).")
-                print(f"{Fore.CYAN}До побачення!{Style.RESET_ALL}")
+                logger.info("Завершення: кінець вводу (EOF).")
                 break
     except KeyboardInterrupt:
-        log.info("Завершення: перервано користувачем (Ctrl+C).")
-        print(
-            f"\n{Fore.YELLOW}Роботу перервано. До побачення!{Style.RESET_ALL}"
-        )
+        logger.info("Завершення: перервано користувачем.")
 
 
 if __name__ == "__main__":
     try:
         main()
-    except Exception as e:
-        Logger().error(f"Критична помилка: {e}")
-        print(f"{Fore.RED}Критична помилка програми.{Style.RESET_ALL}")
+    except Exception:
+        logging.getLogger(__name__).exception("Критична помилка")
         raise
