@@ -13,17 +13,17 @@ class LibraryManager:
         try:
             self._library.add_book(title, author, year)
         except ValueError as e:
-            logger.error("Операція додавання не виконана: %s", e)
+            logger.error("Add operation failed: %s", e)
 
     def remove_book(self, title: str) -> bool:
         try:
             return self._library.remove_book(title)
         except Exception:
-            logger.exception("Неочікувана помилка при видаленні книги")
+            logger.exception("Unexpected error when deleting a book")
             return False
 
     def show_books(self) -> None:
         try:
             self._library.show_books()
         except Exception:
-            logger.exception("Неочікувана помилка при відображенні книг")
+            logger.exception("Unexpected error when showing books")

@@ -12,23 +12,23 @@ class Library(LibraryInterface):
 
     def _validate_book_fields(self, title: str, author: str, year: str) -> None:
         if not title.strip():
-            raise ValueError("Назва книги не може бути порожньою.")
+            raise ValueError("Title is required.")
         if not author.strip():
-            raise ValueError("Автор не може бути порожнім.")
+            raise ValueError("Author is required.")
         if not year.strip():
-            raise ValueError("Рік видання не може бути порожнім.")
+            raise ValueError("Year is required.")
         try:
             y = int(year.strip())
         except ValueError as e:
-            raise ValueError("Рік має бути цілим числом.") from e
+            raise ValueError("Year must be an integer.") from e
         if y < 0 or y > 9999:
-            raise ValueError("Рік має бути в діапазоні 0–9999.")
+            raise ValueError("Year must be between 0 and 9999.")
 
     def add_book(self, title: str, author: str, year: str) -> None:
         self._validate_book_fields(title, author, year)
         self._books.append(Book(title.strip(), author.strip(), year.strip()))
         logger.info(
-            "Додано книгу: %s (%s, %s)",
+            "Added book: %s (%s, %s)",
             title.strip(),
             author.strip(),
             year.strip(),
@@ -36,21 +36,21 @@ class Library(LibraryInterface):
 
     def remove_book(self, title: str) -> bool:
         if not title.strip():
-            logger.warning("Спроба видалити книгу з порожньою назвою.")
+            logger.warning("Attempt to delete a book with an empty title.")
             return False
         for book in self._books:
             if book.title == title.strip():
                 self._books.remove(book)
-                logger.info("Видалено книгу: %s", book.title)
+                logger.info("Deleted book: %s", book.title)
                 return True
-        logger.warning("Книгу не знайдено для видалення: %s", title.strip())
+        logger.warning("Book not found for deletion: %s", title.strip())
         return False
 
     def show_books(self) -> None:
         if not self._books:
-            logger.info("Список книг порожній. У бібліотеці ще немає книг.")
+            logger.info("The list of books is empty. The library has no books yet.")
             return
-        logger.info("Показано список книг (%d шт.).", len(self._books))
+        logger.info("Shown list of books (%d items).", len(self._books))
         for book in self._books:
             logger.info(
                 "Title: %s, Author: %s, Year: %s",

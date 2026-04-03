@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     configure_logging()
-    logger.info("Демонстрація фабрик транспортних засобів.")
+    logger.info("Demo of vehicle factories.")
 
     us_factory = USVehicleFactory()
     vehicle1 = us_factory.create_motorcycle("Harley-Davidson", "Sportster")

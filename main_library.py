@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     configure_logging()
-    logger.info("Запуск програми керування бібліотекою.")
+    logger.info("Starting the library management program.")
 
     library = Library()
     manager = LibraryManager(library)
@@ -20,10 +20,14 @@ def main() -> None:
     try:
         while True:
             try:
-                command = input(
-                    f"{Fore.YELLOW}Enter command (add, remove, show, exit): "
-                    f"{Style.RESET_ALL}"
-                ).strip().lower()
+                command = (
+                    input(
+                        f"{Fore.YELLOW}Enter command (add, remove, show, exit): "
+                        f"{Style.RESET_ALL}"
+                    )
+                    .strip()
+                    .lower()
+                )
 
                 match command:
                     case "add":
@@ -40,7 +44,7 @@ def main() -> None:
                             manager.add_book(title, author, year)
                         except EOFError:
                             logger.warning(
-                                "Несподіваний кінець вводу під час додавання книги."
+                                "Unexpected end of input when adding a book."
                             )
                     case "remove":
                         try:
@@ -51,30 +55,28 @@ def main() -> None:
                             manager.remove_book(title)
                         except EOFError:
                             logger.warning(
-                                "Несподіваний кінець вводу під час видалення."
+                                "Unexpected end of input when removing a book."
                             )
                     case "show":
                         manager.show_books()
                     case "exit":
-                        logger.info("Завершення роботи за командою exit.")
+                        logger.info("End of work by command exit.")
                         break
                     case "":
-                        logger.warning("Порожня команда.")
-                        logger.info(
-                            "Введіть команду: add, remove, show або exit."
-                        )
+                        logger.warning("Empty command.")
+                        logger.info("Enter command: add, remove, show or exit.")
                     case _:
                         logger.info("Invalid command. Please try again.")
             except EOFError:
-                logger.info("Завершення: кінець вводу (EOF).")
+                logger.info("End of work: end of input (EOF).")
                 break
     except KeyboardInterrupt:
-        logger.info("Завершення: перервано користувачем.")
+        logger.info("End of work: interrupted by user.")
 
 
 if __name__ == "__main__":
     try:
         main()
     except Exception:
-        logging.getLogger(__name__).exception("Критична помилка")
+        logging.getLogger(__name__).exception("Critical error")
         raise

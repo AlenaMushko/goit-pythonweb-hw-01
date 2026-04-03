@@ -13,7 +13,7 @@ class Car(Vehicle):
 
     def start_engine(self) -> None:
         logger.info(
-            "%s %s (%s): Двигун запущено",
+            "%s %s (%s): Engine started",
             self.make,
             self.model,
             self.region_spec,
